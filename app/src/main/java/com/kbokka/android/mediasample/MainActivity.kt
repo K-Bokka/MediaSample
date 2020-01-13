@@ -34,6 +34,18 @@ class MainActivity : AppCompatActivity() {
     }
   }
 
+  override fun onDestroy() {
+    super.onDestroy()
+
+    _player?.let {
+      if (it.isPlaying) {
+        it.stop()
+      }
+      it.release()
+    }
+    _player = null
+  }
+
   private inner class PlayPreparedListener : MediaPlayer.OnPreparedListener {
     override fun onPrepared(mp: MediaPlayer) {
       findViewById<Button>(R.id.btPlay).isEnabled = true
