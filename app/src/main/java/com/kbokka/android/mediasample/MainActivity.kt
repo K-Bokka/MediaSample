@@ -7,6 +7,8 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Button
+import android.widget.CompoundButton
+import android.widget.Switch
 import java.io.IOException
 import java.lang.IllegalArgumentException
 import java.net.URI
@@ -33,6 +35,8 @@ class MainActivity : AppCompatActivity() {
     } catch (ex: IOException) {
       Log.e("MediaSample", "メディアプレイヤー準備時の例外発生", ex)
     }
+
+    findViewById<Switch>(R.id.swLoop).setOnCheckedChangeListener(LoopSwitchChangedListener())
   }
 
   fun onPlayButtonClick(view: View) {
@@ -84,7 +88,17 @@ class MainActivity : AppCompatActivity() {
 
   private inner class PlayCompletionListener : MediaPlayer.OnCompletionListener {
     override fun onCompletion(mp: MediaPlayer) {
-      findViewById<Button>(R.id.btPlay).setText(R.string.bt_play_play)
+      _player?.let {
+        if (!it.isLooping) {
+          findViewById<Button>(R.id.btPlay).setText(R.string.bt_play_play)
+        }
+      }
+    }
+  }
+
+  private inner class LoopSwitchChangedListener : CompoundButton.OnCheckedChangeListener {
+    override fun onCheckedChanged(buttonView: CompoundButton, isChecked: Boolean) {
+      _player?.isLooping = isChecked
     }
   }
 }
