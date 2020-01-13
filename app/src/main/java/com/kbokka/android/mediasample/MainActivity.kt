@@ -5,6 +5,7 @@ import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.Button
 import java.io.IOException
 import java.lang.IllegalArgumentException
@@ -31,6 +32,19 @@ class MainActivity : AppCompatActivity() {
       Log.e("MediaSample", "メディアプレイヤー準備時の例外発生", ex)
     } catch (ex: IOException) {
       Log.e("MediaSample", "メディアプレイヤー準備時の例外発生", ex)
+    }
+  }
+
+  fun onPlayButtonClick(view: View) {
+    _player?.let {
+      val btPlay = findViewById<Button>(R.id.btPlay)
+      if (it.isPlaying) {
+        it.pause()
+        btPlay.setText(R.string.bt_play_play)
+      } else {
+        it.start()
+        btPlay.setText(R.string.bt_play_pause)
+      }
     }
   }
 
